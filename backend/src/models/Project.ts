@@ -1,17 +1,17 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export type ProjectType = Document & {
+export interface IProject extends Document {
     projectName: string;
     clientName: string;
     description: string;
-};
+}
 
 const ProjectSchema: Schema = new Schema({
-    projectName: { type: String, required: true, trim: true },
-    clientName: { type: String, required: true, trim: true },
-    description: { type: String, required: true, trim: true },
+    projectName: { type: String, trim: true, required: true },
+    clientName: { type: String, trim: true, required: true },
+    description: { type: String, trim: true, required: true },
 });
 
-const Project = mongoose.model<ProjectType>("Project", ProjectSchema);
+const Project = mongoose.model<IProject>("Project", ProjectSchema);
 
 export default Project;
