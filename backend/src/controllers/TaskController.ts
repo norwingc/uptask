@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Task from "../models/Task";
-import Project from "../models/Project";
 
 export class TaskController {
     static async createTask(req: Request, res: Response) {
@@ -14,13 +13,20 @@ export class TaskController {
         res.status(201).json(task);
     }
 
-    static async getTasks(req: Request, res: Response) {
-        const { projectId } = req.params;
-        const project = await Project.findById(projectId);
-        if (!project) {
-            res.status(404).json({ message: "Project not found" });
+    static async getProjectTasks(req: Request, res: Response) {
+        const tasks = await Task.find({ project: req.project.id }).populate(
+            "project"
+        );
+        res.status(200).json(tasks);
+    }
+
+    static async getTaskById(req: Request, res: Response) {
+        const task = await Task.findById(req.params.taskId).populate("project");
+        if (!task) {
+            res.status(404).json({ error: "Task not found" });
             return;
         }
+        res.status(200).json(task);
     }
 }
 

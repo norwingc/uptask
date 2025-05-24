@@ -4,7 +4,7 @@ import Project from "../models/Project";
 export class ProjectController {
     static getAllProjects = async (req: Request, res: Response) => {
         try {
-            const projects = await Project.find();
+            const projects = await Project.find().populate("tasks");
             res.status(200).json(projects);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -23,7 +23,7 @@ export class ProjectController {
 
     static getProjectById = async (req: Request, res: Response) => {
         const { id } = req.params;
-        const project = await Project.findById(id);
+        const project = await Project.findById(id).populate("tasks");
         if (!project) {
             res.status(404).json({ error: "Project not found" });
             return;
