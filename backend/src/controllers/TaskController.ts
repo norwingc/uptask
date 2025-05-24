@@ -26,6 +26,10 @@ export class TaskController {
             res.status(404).json({ error: "Task not found" });
             return;
         }
+        if (task.project.id !== req.project.id) {
+            res.status(404).json({ error: "Task not found" });
+            return;
+        }
         res.status(200).json(task);
     }
 }
