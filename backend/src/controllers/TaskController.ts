@@ -6,10 +6,10 @@ export class TaskController {
     static async createTask(req: Request, res: Response) {
         const task = new Task(req.body);
         task.project = req.project.id;
-        await task.save();
 
         req.project.tasks.push(task.id);
-        await req.project.save();
+
+        await Promise.all([task.save(), req.project.save()]);
 
         res.status(201).json(task);
     }
